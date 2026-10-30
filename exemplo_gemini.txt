@@ -1,0 +1,165 @@
+NOME_ARQUIVO = "credenciais.txt"
+CHAVE_MESTRA = "PYTHON_LIMPO_2026"
+
+# --- FUNÇÃO MANUAL DE CRIPTOGRAFIA / HASH (Sem usar hashlib) ---
+def gerar_hash_manual(texto, chave):
+    """Gera um hash misturado e ilegível baseado na string e em uma chave secreta"""
+    resultado = []
+    # 1. Aplica uma cifra baseada na posição e na chave mestra
+    for i, caractere in enumerate(texto):
+        codigo_char = ord(caractere)
+        codigo_chave = ord(chave[i % len(chave)])
+        # Mistura os valores numéricos dos caracteres
+        novo_codigo = (codigo_char + codigo_chave + i) % 256
+        resultado.append(str(novo_codigo))
+    
+    # 2. Adiciona um sufixo matemático baseado na soma do texto para simular um hash
+    soma_caracteres = sum(ord(c) for c in texto) * 31
+    resultado.append(str(soma_caracteres % 100000))
+    
+    return "-".join(resultado)
+
+
+# --- OPERAÇÕES DO CRUD ---
+
+# 1. CREATE (Criar)
+def criar_credencial(servico, usuario, senha_limpa):
+    senha_cripto = gerar_hash_manual(senha_limpa, CHAVE_MESTRA)
+    linha = f"{servico},{usuario},{senha_cripto}\n"
+    
+    # Abre o arquivo em modo 'append' (adiciona ao final)
+    with open(NOME_ARQUIVO, "a", encoding="utf-8") as arquivo:
+        arquivo.write(linha)
+    print(f"✅ Credencial para '{servico}' gravada no arquivo!")
+
+
+# 2. READ (Ler / Consultar)
+def listar_credenciais():
+    try:
+        with open(NOME_ARQUIVO, "r", encoding="utf-8") as arquivo:
+            linhas = arquivo.readlines()
+    except FileNotFoundError:
+        print("⚠️ O arquivo ainda não existe. Crie uma credencial primeiro.")
+        return
+
+    if not linhas or len([l for l in linhas if l.strip()]) == 0:
+        print("⚠️ Nenhuma credencial cadastrada.")
+        return
+
+    print("\n--- CREDENCIAIS NO ARQUIVO .TXT ---")
+    for id_reg, linha in enumerate(linhas, start=1):
+        if linha.strip():
+            partes = linha.strip().split(",")
+            print(f"ID: {id_reg} | Serviço: {partes[0]} | Usuário: {partes[1]} | Hash-Senha: {partes[2][:12]}...")
+    print("-----------------------------------\n")
+
+
+# 3. UPDATE (Atualizar)
+def atualizar_senha(id_credencial, nova_senha_limpa):
+    try:
+        with open(NOME_ARQUIVO, "r", encoding="utf-8") as arquivo:
+            linhas = arquivo.readlines()
+    except FileNotFoundError:
+        print("❌ Arquivo não encontrado.")
+        return
+
+    if id_credencial < 1 or id_credencial > len(linhas):
+        print("❌ ID de credencial inválido.")
+        return
+
+    # Modifica a linha específica
+    partes = linhas[id_credencial - 1].strip().split(",")
+    novo_hash = gerar_hash_manual(nova_senha_limpa, CHAVE_MESTRA)
+    linhas[id_credencial - 1] = f"{partes[0]},{partes[1]},{novo_hash}\n"
+
+    # Salva o arquivo atualizado por completo
+    with open(NOME_ARQUIVO, "w", encoding="utf-8") as arquivo:
+        arquivo.writelines(linhas)
+    print(f"🔄 Senha da credencial ID {id_credencial} atualizada com sucesso!")
+
+
+# 4. DELETE (Excluir)
+def deletar_credencial(id_credencial):
+    try:
+        with open(NOME_ARQUIVO, "r", encoding="utf-8") as arquivo:
+            linhas = arquivo.readlines()
+    except FileNotFoundError:
+        print("❌ Arquivo não encontrado.")
+        return
+
+    if id_credencial < 1 or id_credencial > len(linhas):
+        print("❌ ID de credencial inválido.")
+        return
+
+    # Remove o item da lista de linhas
+    linhas.pop(id_credencial - 1)
+
+    # Reescreve o arquivo sem a linha deletada
+    with open(NOME_ARQUIVO, "w", encoding="utf-8") as arquivo:
+        arquivo.writelines(linhas)
+    print(f"🗑️ Credencial ID {id_credencial} removida com sucesso!")
+
+
+# --- BÔNUS: VALIDAÇÃO (Login) ---
+def verificar_senha(servico, usuario, senha_para_testar):
+    try:
+        with open(NOME_ARQUIVO, "r", encoding="utf-8") as arquivo:
+            linhas = arquivo.readlines()
+    except FileNotFoundError:
+        print("❌ Arquivo de credenciais não existe.")
+        return False
+
+    hash_teste = gerar_hash_manual(senha_para_testar, CHAVE_MESTRA)
+
+    for linha in linhas:
+        if linha.strip():
+            srv, usr, hash_salvo = linha.strip().split(",")
+            if srv == servico and usr == usuario:
+                if hash_salvo == hash_teste:
+                    print("🔓 Acesso Autorizado! Senha idêntica.")
+                    return True
+
+    print("🔒 Acesso Negado! Dados incorretos.")
+    return False
+
+
+# --- SIMULAÇÃO COMPLETA DO USO ---
+
+print("=== TESTANDO CRUD 100% PURO (SEM IMPORTS) ===\n")
+
+# C - Criar
+criar_credencial("Twitter", "dev_raíz", "minhaSenhaSemImports")
+criar_credencial("Spotify", "ouvinte_puro", "musicaSempre123")
+
+# R - Ler
+listar_credentials = listar_credenciais()
+
+# Validar (Simulação de Login)
+print("Tentando login no Twitter com a senha certa:")
+verificar_senha("Twitter", "dev_raíz", "minhaSenhaSemImports")
+
+print("\nTentando login com senha incorreta:")
+verificar_senha("Twitter", "dev_raíz", "senha_chutada")
+
+# U - Atualizar (ID 1 - Twitter)
+print("\n")
+atualizar_senha(1, "novaSenhaSuperSecreta")
+
+# D - Deletar (ID 2 - Spotify)
+deletar_credencial(2)
+
+# R - Ler resultado final
+listar_credenciais()
+
+
+
+——————————————————————— 
+
+🧠 Como esse código funciona sem imports?
+	•	Persistência com open(): Funções built-in do Python como open(), .readlines() e .writelines() gerenciam a leitura e escrita de arquivos diretamente no seu disco rígido em formato CSV de texto simplificado.
+	•	Criptografia com ord(): Usamos a função nativa ord() para transformar letras em seus números correspondentes na tabela ASCII/Unicode, manipulando esses números de forma matemática para embaralhar a senha e torná-la irreconhecível caso alguém abra o arquivo .txt. 
+
+Como quer avançar a partir daqui?
+	•	Posso criar um menu interativo usando input() para que você controle as operações pelo teclado.
+	•	Posso te ensinar a transformar esses registros em formato de dicionário para buscar dados mais rápido na memória.
+	•	Posso explicar como funciona a lógica matemática usada na função gerar_hash_manual.

@@ -1,0 +1,13 @@
+O QUE DEVE CONTER (infos):
+
+- servico
+- usuario_ou_email
+- senha
+- categoria (banco , rede_social , estudo , trabalho , outros) -- cada uma com uma exigência mínima de força de senha definida pelo usuário
+- observacoes
+- data_cadastro_alteracao
+
+
+Ao listar as credenciais, as senhas não devem aparecer por completo na tela. Mostre apenas
+parte delas, por exemplo, os dois primeiros caracteres seguidos de asteriscos. Deve existir uma
+opção específica para revelar uma senha.
