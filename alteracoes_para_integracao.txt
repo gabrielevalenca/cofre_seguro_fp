@@ -1,0 +1,7 @@
+Remover o código de teste que ficou fora das funções
+Colocar (exibir_analise_senha) dentro do cadastro de credenciais 
+Colocar (exibir_analise_senha) dentro de edição de credenciais 
+Conferir os nomes das categorias
+Ver arquivo de senhas comuns
+
+

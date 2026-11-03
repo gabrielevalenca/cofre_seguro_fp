@@ -1,0 +1,8 @@
+credenciais=[]
+requisitos
+analise da senha (carregar_senhas_comuns, verificar_senha_comum, analisar_senha e exibir_analise_senha)
+cadastro (cadastro.py)
+vizualização (cadastro.py)
+edição (cadastro.py)
+exclusão (cadastro.py)
+menu (cadastro.py)
