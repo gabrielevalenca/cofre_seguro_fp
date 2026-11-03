@@ -17,16 +17,15 @@ requisitos_categoria = {
 # Análise de senha
 def carregar_senhas_comuns():
     senhas_comuns = []
+
     try:
-        arquivo = open("senhas_comuns.txt", "r", encoding="utf-8")
+        arquivo = open("senhas_comuns.txt", "r")
         for linha in arquivo:
-            senha = linha.strip()
-            senhas_comuns.append(senha)
+            senhas_comuns.append(linha.strip())
         arquivo.close()
-    except FileNotFoundError:
+    except:
         print("Arquivo de senhas comuns não encontrado.")
     return senhas_comuns
-
 
 def verificar_senha_comum(senha):
     senhas_comuns = carregar_senhas_comuns()
