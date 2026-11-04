@@ -34,23 +34,27 @@ def verificar_senha_comum(senha):
     else:
         return False
 
-
 def analisar_senha(senha, categoria):
     pontos = 0
     motivos = []
+    maiusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    minusculas = "abcdefghijklmnopqrstuvwxyz"
+    numeros = "0123456789"
+    simbolos = "!@#$%&*()-_+=.;:?"
+    
     tem_maiuscula = False
     tem_minuscula = False
     tem_numero = False
     tem_simbolo = False
 
     for letra in senha:
-        if letra.isupper():
+        if letra in maiusculas:
             tem_maiuscula = True
-        elif letra.islower():
+        elif letra in minusculas:
             tem_minuscula = True
-        elif letra.isdigit():
+        elif letra in numeros:
             tem_numero = True
-        elif not letra.isspace():
+        elif letra in simbolos:
             tem_simbolo = True
 
     if len(senha) >= 8:
@@ -98,34 +102,31 @@ def analisar_senha(senha, categoria):
 
             if pontos < requisitos_categoria[nome_categoria]:
                 classificacao = "Fraca"
-                motivos.append(
-                    "A senha não atingiu a pontuação mínima para essa categoria."
-                )
+                pontos = 0
+                motivos.append("A senha não atingiu a pontuação mínima para essa categoria. A pontuação foi zerada.")
             break
 
     if categoria_encontrada == False:
         classificacao = "Fraca"
-        motivos.append("Categoria não cadastrada!")
+        pontos = 0
+        motivos.append("Categoria não cadastrada! A pontuação foi zerada.")
 
     if verificar_senha_comum(senha):
-        motivos.append("Essa senha está na lista de senhas comuns.")
+        pontos = 0
         classificacao = "Fraca"
+        motivos.append("Essa senha está na lista de senhas comuns! A pontuação foi zerada por segurança.")
 
     return classificacao, pontos, motivos
 
-
 def exibir_analise_senha(senha, categoria):
     classificacao, pontos, motivos = analisar_senha(senha, categoria)
-
     print("\n---------- ANÁLISE DA SENHA ----------")
     print("Categoria:", categoria)
     print("Pontuação:", pontos, "/5")
     print("Classificação:", classificacao)
     print("\nMotivos da classificação:")
-
     for motivo in motivos:
         print("-", motivo)
-
 
 # Cadastro
 def cadastrar_credenciais():
@@ -138,7 +139,7 @@ def cadastrar_credenciais():
 
     categoria = input("Digite a categoria: ")
     observacoes = input("Digite as observações: ")
-
+    
     data_atualizacao = datetime.now().strftime("%d/%m/%Y %H:%M")
 
     nova_credencial = {
