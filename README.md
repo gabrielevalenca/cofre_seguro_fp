@@ -9,7 +9,7 @@ REQUISITOS FUNCIONAIS
 2. Análise de força de senha - Laura Carvalho | Github: https://github.com/LauraLCarvalho
 3. Detecção de risco - Letícia Tiemi | Github: 
 4. Registro de auditoria - Gabriele Valença | Github: https://github.com/gabrielevalenca
-5. Armazenamento de dados - Maria Eduarda Escanoni | Github: https://github.com/mariaeduardaescanoni-lgtm
+5. Armazenamento de dados - Maria Eduarda Escanoni | Github: @mariaeduardaescanoni-lgtm
 6. Relatório de segurança - Gabriela Barradas | Github: 
 7. Funcionalidade extra - Todo grupo
 
