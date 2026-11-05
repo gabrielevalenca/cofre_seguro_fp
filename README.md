@@ -7,10 +7,10 @@ REQUISITOS FUNCIONAIS
 
 1. CRUD de credenciais - Clara de Barros | Github: https://github.com/clarabnunes
 2. Análise de força de senha - Laura Carvalho | Github: https://github.com/LauraLCarvalho
-3. Detecção de risco - Letícia Tiemi | Github: 
+3. Detecção de risco - Letícia Tiemi | Github: https://github.com/leticiatiemi-fs
 4. Registro de auditoria - Gabriele Valença | Github: https://github.com/gabrielevalenca
-5. Armazenamento de dados - Maria Eduarda Escanoni | Github: @mariaeduardaescanoni-lgtm
-6. Relatório de segurança - Gabriela Barradas | Github: 
+5. Armazenamento de dados - Maria Eduarda Escanoni | Github: https://github.com/mariaeduardaescanoni-lgtm
+6. Relatório de segurança - Gabriela Barradas | Github: https://github.com/gabrielabborba2008-ship-it
 7. Funcionalidade extra - Todo grupo
 
 O arquivo para testar é https://github.com/gabrielevalenca/cofre_seguro_fp/blob/main/integrado2.py 
