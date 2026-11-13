@@ -1,5 +1,36 @@
 from datetime import datetime
 
+# Registro no arquivo de auditoria
+def registrar_log(operacao, servico):
+    data_hora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+    arquivo = open("auditoria.log", "a", encoding="utf-8")
+    arquivo.write(
+        f"{data_hora} | Operação: {operacao} | Serviço: {servico}\n"
+    )
+    arquivo.close()
+
+# Consulta de logs:
+def consultar_logs():
+    try:
+        arquivo = open("auditoria.log", "r", encoding="utf-8")
+
+        print("\n---------- LOG DE AUDITORIA ----------")
+
+        vazio = True
+        for linha in arquivo:
+            print(linha.strip())
+            vazio = False
+
+        if vazio:
+            print("Nenhum registro encontrado.")
+
+        arquivo.close()
+
+    except FileNotFoundError:
+        print("Nenhum log foi gerado ainda.")
+
+
 credenciais = []
 categorias = [
     "Rede Social", 
@@ -141,6 +172,8 @@ def cadastrar_credenciais():
     }
 
     credenciais.append(nova_credencial)
+# Registrar no log:
+    registrar_log("Cadastro de credencial", servico)
 
     print("Cadastro confirmado!")
     exibir_analise_senha(senha, categoria)
@@ -152,6 +185,13 @@ def visualizar_credenciais():
         print("Não existem cadastros.")
     else:
         for credencial in credenciais:
+
+# Registrar no log:
+            registrar_log(
+                "Visualização de credencial",
+                credencial["servico"]
+            )
+            
             senha_oculta = credencial["senha"][:2] + "*" * max(0, len(credencial["senha"]) - 2)
 
             print("\n---------- CREDENCIAL ----------")
@@ -171,6 +211,8 @@ def revelar_senha():
     for credencial in credenciais:
         if credencial["servico"] == servico_revelar:
             print("Senha:", credencial["senha"])
+            # Registrar no log:
+            registrar_log("Revelação de senha", servico_revelar)
             encontrado = True
             break
 
@@ -188,6 +230,8 @@ def editar_credenciais():
             nova_senha = input("Qual será a senha nova? ")
 
             credencial["senha"] = nova_senha
+            # Registrar no log:
+            registrar_log("Alteração de senha", servico_editar)
             credencial["data_atualizacao"] = datetime.now().strftime("%d/%m/%Y %H:%M")
 
             encontrado = True
@@ -211,6 +255,8 @@ def excluir_credenciais():
     for credencial in credenciais:
         if credencial["servico"] == servico_excluir:
             credenciais.remove(credencial)
+            # Registro no log:
+            registrar_log("Exclusão de credencial", servico_excluir)
             encontrado = True
             print("Credencial excluída!")
             break
@@ -233,6 +279,8 @@ def cadastrar_categoria():
             return
 
     categorias.append(nome)
+    # Registro no log:
+    registrar_log("Cadastro de categoria", nome)
     print("Categoria cadastrada com sucesso!")
     
 
@@ -256,6 +304,7 @@ while True:
     print("6 - Revelar Senha")
     print("7 - Cadastrar Categoria")
     print("8 - Consultar Categorias")
+    print("9 - Consultar Log de Auditoria")
 
     opcao = input("Digite a opção: ")
 
@@ -283,6 +332,9 @@ while True:
 
     elif opcao == "8":
         visualizar_categorias()
+
+    elif opcao == "9":
+        consultar_logs()
 
     else:
         print("Opção inválida!")
