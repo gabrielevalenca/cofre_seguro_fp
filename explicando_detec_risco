@@ -1,0 +1,8 @@
+Funções
+1. verificar_senha_repetida(credencial_atual): compara a credencial com todas as outras do cofre e se achar a mesma senha, exibe um alerta listando os serviços. Roda automaticamente no cadastro e na edição
+2. verificar_todas_senhas_repetidas(): agrupa todas as credenciais por senha usando um dicionário e mostra quais senhas se repetem e em quais serviços. Roda pela opção 10 do menu
+
+Integração
+1. cadastrar_credenciais() e editar_credenciais() chamam verificar_senha_repetida()
+2. menu: opção 10 - Verificar Senhas Repetidas
+3. registrar_log() grava no auditoria.log os alertas e as verificações que encontram risco
